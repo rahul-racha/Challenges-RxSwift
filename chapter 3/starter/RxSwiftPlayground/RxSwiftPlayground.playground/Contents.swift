@@ -37,6 +37,7 @@ example(of: "ReplaySubject") {
     .disposed(by: disposeBag)
     
     repSubject.onNext("fourth call")
+    
     repSubject.subscribe {
         print(label: "subsc 2", event: $0)
 //        onNext: {
@@ -45,16 +46,21 @@ example(of: "ReplaySubject") {
         }
         .disposed(by: disposeBag)
     
+    repSubject.onNext("4th copy call")
     repSubject.onNext("fifth call")
+    repSubject.onNext("sixth call")
     repSubject.onError(CustomError.someError)
-    repSubject.dispose()
+    repSubject.onCompleted()
     
-    repSubject.subscribe {
-        print(label: "subsc 1", event: $0)
-//        onNext: {
-//            print("3 subs", $0)
-//    }
-      }
+    repSubject.subscribe (
+//        print(label: "subsc 3", event: $0)
+        onNext: {
+            print("subsc 3", $0)
+    },
+        onDisposed: {
+            print("observable completed")
+        }
+      )
         .disposed(by: disposeBag)
 }
 
